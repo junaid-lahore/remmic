@@ -1,14 +1,16 @@
 # settings.py (Updated for JWT and custom user)
 
+from decouple import config, Csv
 from pathlib import Path
 from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-xyz123'
+SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG = config('DEBUG')
+
+ALLOWED_HOSTS = config('ALLOWED_HOSTS',cast=Csv())
 
 # Installed apps
 INSTALLED_APPS = [
@@ -43,7 +45,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -60,13 +62,19 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('NAME'),
+        'USER': config('USER'),
+        'PASSWORD': config('PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '',  # or '5432'
     }
 }
 
 # Static files
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # REST framework & JWT

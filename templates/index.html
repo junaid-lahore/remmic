@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remmic Real Estate - Find Your Dream Home</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    
+    <!-- Google Maps API -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDummyKeyForDemo&callback=initGoogleMaps&libraries=places"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white-95 backdrop-blur border-bottom">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="#home">
+                <div class="logo-container me-3">
+                    <div class="logo-icon">
+                        <i class="bi bi-house-fill"></i>
+                        <div class="logo-accent"></div>
+                    </div>
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">Remmic</span>
+                    <small class="brand-tagline">Real Estate</small>
+                </div>
+            </a>
+            
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home" onclick="scrollToSection('home')">
+                            <span class="nav-text-en">Home</span>
+                            <span class="nav-text-ur d-none">گھر</span>
+                            <span class="nav-text-ar d-none">الرئيسية</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#properties" onclick="scrollToSection('properties')">
+                            <span class="nav-text-en">Properties</span>
+                            <span class="nav-text-ur d-none">پراپرٹیز</span>
+                            <span class="nav-text-ar d-none">العقارات</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button" data-bs-toggle="dropdown">
+                            <span class="nav-text-en">About</span>
+                            <span class="nav-text-ur d-none">ہمارے بارے میں</span>
+                            <span class="nav-text-ar d-none">معلومات عنا</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="about.html">
+                                <span class="nav-text-en">About Us</span>
+                                <span class="nav-text-ur d-none">ہمارے بارے میں</span>
+                                <span class="nav-text-ar d-none">معلومات عنا</span>
+                            </a></li>
+                            <li><a class="dropdown-item" href="mission.html">
+                                <span class="nav-text-en">Our Mission</span>
+                                <span class="nav-text-ur d-none">ہ��ارا مشن</span>
+                                <span class="nav-text-ar d-none">مهمتنا</span>
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact" onclick="scrollToSection('contact')">
+                            <span class="nav-text-en">Contact</span>
+                            <span class="nav-text-ur d-none">رابطہ</span>
+                            <span class="nav-text-ar d-none">اتصل بنا</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login'%}">
+                            <span class="nav-text-en">Login</span>
+                            <span class="nav-text-ur d-none">لاگ ان</span>
+                            <span class="nav-text-ar d-none">تسجيل الدخول</span>
+                        </a>
+                    </li>
+                    <li class="nav-item d-none" id="dashboardNavItem">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="bi bi-speedometer2 me-1"></i>
+                            <span class="nav-text-en">Dashboard</span>
+                            <span class="nav-text-ur d-none">ڈیش بورڈ</span>
+                            <span class="nav-text-ar d-none">لوحة التحكم</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Language Switcher -->
+                <div class="dropdown me-3">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown">
+                        <i class="bi bi-globe"></i>
+                        <span id="currentLanguageFlag">🇺🇸</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="changeLanguage('en')">🇺🇸 English</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeLanguage('ur')">🇵🇰 اردو</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeLanguage('ar')">🇸🇦 العربية</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Get Started Button -->
+                <!-- templates/home.html -->
+                <form method="POST" action="{% url 'get_started' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text-en">Get Started</span>
+                        <span class="btn-text-ur d-none">شروع کریں</span>
+                        <span class="btn-text-ar d-none">ابدأ الآن</span>
+                    </button>
+                </form>
+
+<!--                <button class="btn btn-primary">-->
+<!--                    <span class="btn-text-en">Get Started</span>-->
+<!--                    <span class="btn-text-ur d-none">شروع کریں</span>-->
+<!--                    <span class="btn-text-ar d-none">ابدأ الآن</span>-->
+<!--                </button>-->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Slider -->
+    <section id="home" class="hero-section">
+        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-inner">
+                <!-- Slide 1 -->
+                <div class="carousel-item active">
+                    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1920&h=1080&fit=crop')">
+                        <div class="hero-overlay"></div>
+                        <div class="hero-content">
+                            <div class="container">
+                                <div class="row justify-content-center text-center">
+                                    <div class="col-lg-8">
+                                        <h1 class="hero-title">
+                                            <span class="hero-title-en">Find Your Dream Home</span>
+                                            <span class="hero-title-ur d-none">اپنا خوابوں کا گھر تلاش کریں</span>
+                                            <span class="hero-title-ar d-none">اعثر على منزل أحلامك</span>
+                                        </h1>
+                                        <p class="hero-subtitle">
+                                            <span class="hero-subtitle-en">Discover premium properties across 6 countries worldwide</span>
+                                            <span class="hero-subtitle-ur d-none">دنیا بھر کے 6 ممالک میں پریمیم پراپرٹیز دریافت کریں</span>
+                                            <span class="hero-subtitle-ar d-none">اكتشف العقارات المميزة في 6 دول حول العالم</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 2 -->
+                <div class="carousel-item">
+                    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1920&h=1080&fit=crop')">
+                        <div class="hero-overlay"></div>
+                        <div class="hero-content">
+                            <div class="container">
+                                <div class="row justify-content-center text-center">
+                                    <div class="col-lg-8">
+                                        <h1 class="hero-title">
+                                            <span class="hero-title-en">Luxury Living Redefined</span>
+                                            <span class="hero-title-ur d-none">لگژری زندگی کی نئی تعریف</span>
+                                            <span class="hero-title-ar d-none">إعادة تعريف الحياة الفاخرة</span>
+                                        </h1>
+                                        <p class="hero-subtitle">
+                                            <span class="hero-subtitle-en">Experience world-class amenities and locations</span>
+                                            <span class="hero-subtitle-ur d-none">عالمی معیار کی سہولات اور مقامات کا تجربہ کریں</span>
+                                            <span class="hero-subtitle-ar d-none">اختبر المرافق والمواقع ذات المستوى العالمي</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 3 -->
+                <div class="carousel-item">
+                    <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?w=1920&h=1080&fit=crop')">
+                        <div class="hero-overlay"></div>
+                        <div class="hero-content">
+                            <div class="container">
+                                <div class="row justify-content-center text-center">
+                                    <div class="col-lg-8">
+                                        <h1 class="hero-title">
+                                            <span class="hero-title-en">Your Trusted Real Estate Partner</span>
+                                            <span class="hero-title-ur d-none">آپ کا قابل اعتماد ریئل اسٹ��ٹ پارٹنر</span>
+                                            <span class="hero-title-ar d-none">شريكك الموثوق في العقارات</span>
+                                        </h1>
+                                        <p class="hero-subtitle">
+                                            <span class="hero-subtitle-en">25+ years of excellence in property services</span>
+                                            <span class="hero-subtitle-ur d-none">پراپرٹی سروسز میں 25+ سال کی بہترین کارکردگی</span>
+                                            <span class="hero-subtitle-ar d-none">أكثر من 25 عامًا من التميز في خدمات العقارات</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Carousel Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+            
+            <!-- Carousel Indicators -->
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="search-container">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="search-box">
+                            <div class="row g-3">
+                                <div class="col-lg-6">
+                                    <button class="btn btn-primary btn-lg w-100" onclick="scrollToSection('properties')">
+                                        <i class="bi bi-house-door me-2"></i>
+                                        <span class="view-btn-en">View Properties</span>
+                                        <span class="view-btn-ur d-none">پراپرٹیز دیکھیں</span>
+                                        <span class="view-btn-ar d-none">عرض العقارات</span>
+                                    </button>
+                                </div>
+                                <div class="col-lg-6">
+                                    <button class="btn btn-outline-primary btn-lg w-100" onclick="scrollToSection('services')">
+                                        <i class="bi bi-info-circle me-2"></i>
+                                        <span class="learn-btn-en">Learn More</span>
+                                        <span class="learn-btn-ur d-none">مزید جانیں</span>
+                                        <span class="learn-btn-ar d-none">تعلم المزيد</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Property Listings Section -->
+    <section id="properties" class="py-5 bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-4 fw-bold text-primary mb-4">
+                    <span class="section-title-en">Property Listings</span>
+                    <span class="section-title-ur d-none">پراپرٹی لسٹنگز</span>
+                    <span class="section-title-ar d-none">قوائم العقارات</span>
+                </h2>
+                <p class="lead text-muted">
+                    <span class="section-subtitle-en">Browse our complete collection of premium properties with advanced filters and detailed information.</span>
+                    <span class="section-subtitle-ur d-none">ایڈوانس فلٹرز اور تفصیلی معلومات کے ساتھ ہمارے پریمیم پراپرٹیز کا مکمل مجموعہ دیکھیں۔</span>
+                    <span class="section-subtitle-ar d-none">تصفح مجموعتنا الكاملة من العقارات المميزة مع المرشحات المتقدمة والمعلومات التفصيلية.</span>
+                </p>
+            </div>
+            
+            <!-- Filters -->
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-10">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <select class="form-select" id="cityFilter">
+                                        <option value="all">All Cities</option>
+                                        <option value="Lahore">Lahore, Pakistan</option>
+                                        <option value="Karachi">Karachi, Pakistan</option>
+                                        <option value="Islamabad">Islamabad, Pakistan</option>
+                                        <option value="Dubai">Dubai, UAE</option>
+                                        <option value="London">London, UK</option>
+                                        <option value="Toronto">Toronto, Canada</option>
+                                        <option value="New York">New York, USA</option>
+                                        <option value="Sydney">Sydney, Australia</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select" id="typeFilter">
+                                        <option value="all">All Types</option>
+                                        <option value="Villa">Villa</option>
+                                        <option value="Apartment">Apartment</option>
+                                        <option value="Commercial">Commercial</option>
+                                        <option value="Penthouse">Penthouse</option>
+                                        <option value="Farmhouse">Farmhouse</option>
+                                        <option value="Studio">Studio</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select" id="bedsFilter">
+                                        <option value="all">Any Bedrooms</option>
+                                        <option value="1">1 Bedroom</option>
+                                        <option value="2">2 Bedrooms</option>
+                                        <option value="3">3 Bedrooms</option>
+                                        <option value="4">4 Bedrooms</option>
+                                        <option value="5">5+ Bedrooms</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-primary w-100" onclick="applyFilters()">
+                                        <i class="bi bi-funnel me-2"></i>
+                                        <span class="filter-btn-en">Apply Filters</span>
+                                        <span class="filter-btn-ur d-none">فلٹر لگائیں</span>
+                                        <span class="filter-btn-ar d-none">تطبيق المرشحات</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map View Toggle -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="h5 mb-0">
+                                <span class="view-results-en">Properties Found:</span>
+                                <span class="view-results-ur d-none">پراپرٹیز ملیں:</span>
+                                <span class="view-results-ar d-none">العقارات الموجودة:</span>
+                                <span id="propertyCount" class="text-primary">0</span>
+                            </span>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-primary active" id="gridViewBtn" onclick="switchToGridView()">
+                                <i class="bi bi-grid me-1"></i>
+                                <span class="grid-view-en">Grid</span>
+                                <span class="grid-view-ur d-none">گرڈ</span>
+                                <span class="grid-view-ar d-none">شبكة</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary" id="mapViewBtn" onclick="switchToMapView()">
+                                <i class="bi bi-map me-1"></i>
+                                <span class="map-view-en">Map</span>
+                                <span class="map-view-ur d-none">نقشہ</span>
+                                <span class="map-view-ar d-none">خريطة</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Properties Grid -->
+            <div class="row" id="propertiesContainer">
+                <!-- Properties will be dynamically loaded here -->
+            </div>
+            
+            <!-- Map Container -->
+            <div class="d-none" id="mapContainer">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div id="googleMap" style="height: 600px; width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map Property Info Window Template -->
+            <div class="d-none" id="mapInfoWindowTemplate">
+                <div class="map-info-window">
+                    <img src="" alt="" class="map-property-image">
+                    <div class="map-property-details">
+                        <h6 class="map-property-title"></h6>
+                        <p class="map-property-location"></p>
+                        <p class="map-property-price"></p>
+                        <button class="btn btn-primary btn-sm">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="py-5" style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&h=1080&fit=crop'); background-size: cover; background-position: center;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-4 fw-bold text-white mb-4">
+                    <span class="services-title-en">Our Services</span>
+                    <span class="services-title-ur d-none">ہماری خدمات</span>
+                    <span class="services-title-ar d-none">خدماتنا</span>
+                </h2>
+                <p class="lead text-white-75 col-lg-8 mx-auto">
+                    <span class="services-subtitle-en">Comprehensive real estate solutions tailored to your needs across multiple countries.</span>
+                    <span class="services-subtitle-ur d-none">متعدد ممالک میں آپ کی ضروریات کے مطابق مکمل ریئل اسٹیٹ حل۔</span>
+                    <span class="services-subtitle-ar d-none">حلول عقارية شاملة مصممة لتلبية احتياجاتك عبر عدة دول.</span>
+                </p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 text-center shadow-lg">
+                        <div class="card-body p-4">
+                            <div class="feature-icon mb-3 mx-auto">
+                                <i class="bi bi-house-door"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">
+                                <span class="service1-title-en">Property Buying</span>
+                                <span class="service1-title-ur d-none">پراپرٹی خریدنا</span>
+                                <span class="service1-title-ar d-none">شراء العقارات</span>
+                            </h5>
+                            <p class="text-muted">
+                                <span class="service1-desc-en">Expert guidance through the entire property purchase process from search to ownership.</span>
+                                <span class="service1-desc-ur d-none">تلاش سے لے کر ملکیت تک پراپرٹی خریداری کے پورے عمل میں ماہرانہ رہنمائی۔</span>
+                                <span class="service1-desc-ar d-none">إرشاد خبير خلال عملية شراء العقار بأكملها من البحث إلى الملكية.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 text-center shadow-lg">
+                        <div class="card-body p-4">
+                            <div class="feature-icon mb-3 mx-auto">
+                                <i class="bi bi-currency-exchange"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">
+                                <span class="service2-title-en">Property Selling</span>
+                                <span class="service2-title-ur d-none">پراپرٹی بیچنا</span>
+                                <span class="service2-title-ar d-none">بيع العقارات</span>
+                            </h5>
+                            <p class="text-muted">
+                                <span class="service2-desc-en">Professional marketing and sales services to get the best value for your property.</span>
+                                <span class="service2-desc-ur d-none">آپ کی پراپرٹی کے لیے بہترین قیمت حاصل کرنے کے لیے پیشہ ورانہ مارکیٹنگ اور سیلز سروسز۔</span>
+                                <span class="service2-desc-ar d-none">خدمات التسويق والمبيعات المهنية للحصول على أفضل ��يمة لعقارك.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 text-center shadow-lg">
+                        <div class="card-body p-4">
+                            <div class="feature-icon mb-3 mx-auto">
+                                <i class="bi bi-key"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">
+                                <span class="service3-title-en">Property Rental</span>
+                                <span class="service3-title-ur d-none">پراپرٹی کرایہ</span>
+                                <span class="service3-title-ar d-none">تأجير العقارات</span>
+                            </h5>
+                            <p class="text-muted">
+                                <span class="service3-desc-en">Complete rental management services for both landlords and tenants.</span>
+                                <span class="service3-desc-ur d-none">مالکان اور کرایہ داروں دونوں کے لیے مکمل کرایہ منیجمنٹ سروسز۔</span>
+                                <span class="service3-desc-ar d-none">خدمات إدارة الإيجار الكاملة لكل من الملاك والمستأجري��.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 text-center shadow-lg">
+                        <div class="card-body p-4">
+                            <div class="feature-icon mb-3 mx-auto">
+                                <i class="bi bi-graph-up"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">
+                                <span class="service4-title-en">Investment Advisory</span>
+                                <span class="service4-title-ur d-none">سرمایہ کاری مشاورت</span>
+                                <span class="service4-title-ar d-none">الاستشارة الاستثمارية</span>
+                            </h5>
+                            <p class="text-muted">
+                                <span class="service4-desc-en">Strategic investment advice to maximize your real estate portfolio returns.</span>
+                                <span class="service4-desc-ur d-none">آ�� کے ریئل اسٹیٹ پورٹ فولیو کی واپسی کو زیادہ سے زیادہ کرنے کے لیے اسٹریٹجک سرما��ہ کاری مشورہ۔</span>
+                                <span class="service4-desc-ar d-none">المش��رة ال��ستثمارية الاستراتيجية لتعظيم عوائد محفظة العقارات الخاصة بك.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 text-center shadow-lg">
+                        <div class="card-body p-4">
+                            <div class="feature-icon mb-3 mx-auto">
+                                <i class="bi bi-clipboard-check"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">
+                                <span class="service5-title-en">Legal Documentation</span>
+                                <span class="service5-title-ur d-none">قانونی دستاویزات</span>
+                                <span class="service5-title-ar d-none">التوثيق القانوني</span>
+                            </h5>
+                            <p class="text-muted">
+                                <span class="service5-desc-en">Complete legal documentation and compliance services for all property transactions.</span>
+                                <span class="service5-desc-ur d-none">تمام پراپرٹی لین دین کے لیے مکمل قانونی دستاویزات اور تعمیل کی خدمات۔</span>
+                                <span class="service5-desc-ar d-none">خدمات التوثيق القانوني والامتثال الكاملة لجميع معاملات العقارات.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 text-center shadow-lg">
+                        <div class="card-body p-4">
+                            <div class="feature-icon mb-3 mx-auto">
+                                <i class="bi bi-globe2"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">
+                                <span class="service6-title-en">International Properties</span>
+                                <span class="service6-title-ur d-none">بین الاقوامی پراپرٹیز</span>
+                                <span class="service6-title-ar d-none">العقارات الدولية</span>
+                            </h5>
+                            <p class="text-muted">
+                                <span class="service6-desc-en">Access to premium properties across 6 countries with local expertise.</span>
+                                <span class="service6-desc-ur d-none">مقامی مہارت کے ساتھ 6 ممالک میں پریمیم پراپرٹیز تک رسائی۔</span>
+                                <span class="service6-desc-ar d-none">الوصول إلى العقارات المميزة عبر 6 دول مع الخبرة المحلية.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Global Presence Section -->
+    <section class="py-5" style="background-image: linear-gradient(rgba(0, 112, 243, 0.9), rgba(0, 112, 243, 0.9)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=1080&fit=crop'); background-size: cover; background-position: center;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-4 fw-bold text-white mb-4">
+                    <span class="global-title-en">Global Presence</span>
+                    <span class="global-title-ur d-none">عالمی موجودگی</span>
+                    <span class="global-title-ar d-none">الحضور ��لعالمي</span>
+                </h2>
+                <p class="lead text-white-75">
+                    <span class="global-subtitle-en">Serving clients across 6 countries with local expertise and international standards.</span>
+                    <span class="global-subtitle-ur d-none">مقامی مہارت اور بین الاقوامی معیارات کے ساتھ 6 ممالک میں کلائن��س کی خدمت کرنا۔</span>
+                    <span class="global-subtitle-ar d-none">خدمة العملاء عبر 6 دول مع الخبرة المحلية والمعايير الدولية.</span>
+                </p>
+            </div>
+            
+            <div class="row text-center">
+                <div class="col-lg-2 col-md-4 col-6 mb-4">
+                    <div class="text-white">
+                        <h3 class="display-6 fw-bold mb-2">🇵🇰</h3>
+                        <h5 class="fw-semibold">
+                            <span class="country1-en">Pakistan</span>
+                            <span class="country1-ur d-none">پاکستان</span>
+                            <span class="country1-ar d-none">باكستان</span>
+                        </h5>
+                        <p class="small text-white-75">
+                            <span class="country1-desc-en">Home Base</span>
+                            <span class="country1-desc-ur d-none">بنیادی مرکز</span>
+                            <span class="country1-desc-ar d-none">القاعدة الرئيسية</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6 mb-4">
+                    <div class="text-white">
+                        <h3 class="display-6 fw-bold mb-2">🇦🇪</h3>
+                        <h5 class="fw-semibold">
+                            <span class="country2-en">UAE</span>
+                            <span class="country2-ur d-none">یو اے ای</span>
+                            <span class="country2-ar d-none">الإمارات</span>
+                        </h5>
+                        <p class="small text-white-75">
+                            <span class="country2-desc-en">Luxury Market</span>
+                            <span class="country2-desc-ur d-none">لگژری مارکیٹ</span>
+                            <span class="country2-desc-ar d-none">السوق الفاخر</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6 mb-4">
+                    <div class="text-white">
+                        <h3 class="display-6 fw-bold mb-2">🇬🇧</h3>
+                        <h5 class="fw-semibold">
+                            <span class="country3-en">UK</span>
+                            <span class="country3-ur d-none">برطانیہ</span>
+                            <span class="country3-ar d-none">المملكة المتحدة</span>
+                        </h5>
+                        <p class="small text-white-75">
+                            <span class="country3-desc-en">Premium Properties</span>
+                            <span class="country3-desc-ur d-none">پریمیم پراپرٹیز</span>
+                            <span class="country3-desc-ar d-none">العقارات المميزة</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6 mb-4">
+                    <div class="text-white">
+                        <h3 class="display-6 fw-bold mb-2">🇨🇦</h3>
+                        <h5 class="fw-semibold">
+                            <span class="country4-en">Canada</span>
+                            <span class="country4-ur d-none">کینیڈا</span>
+                            <span class="country4-ar d-none">ك��دا</span>
+                        </h5>
+                        <p class="small text-white-75">
+                            <span class="country4-desc-en">Modern Living</span>
+                            <span class="country4-desc-ur d-none">جدید زندگی</span>
+                            <span class="country4-desc-ar d-none">الحياة العصرية</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6 mb-4">
+                    <div class="text-white">
+                        <h3 class="display-6 fw-bold mb-2">🇺🇸</h3>
+                        <h5 class="fw-semibold">
+                            <span class="country5-en">USA</span>
+                            <span class="country5-ur d-none">امریکہ</span>
+                            <span class="country5-ar d-none">الولايات المتحدة</span>
+                        </h5>
+                        <p class="small text-white-75">
+                            <span class="country5-desc-en">Investment Hub</span>
+                            <span class="country5-desc-ur d-none">سرمایہ کاری مرکز</span>
+                            <span class="country5-desc-ar d-none">مركز الاستثمار</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6 mb-4">
+                    <div class="text-white">
+                        <h3 class="display-6 fw-bold mb-2">🇦🇺</h3>
+                        <h5 class="fw-semibold">
+                            <span class="country6-en">Australia</span>
+                            <span class="country6-ur d-none">آسٹریلیا</span>
+                            <span class="country6-ar d-none">أستراليا</span>
+                        </h5>
+                        <p class="small text-white-75">
+                            <span class="country6-desc-en">Lifestyle Properties</span>
+                            <span class="country6-desc-ur d-none">طرز زندگی پراپرٹیز</span>
+                            <span class="country6-desc-ar d-none">عقارات نمط الحياة</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Feedback Section -->
+    <section class="py-5" style="background-image: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)), url('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=1920&h=1080&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-4 fw-bold text-primary mb-4">
+                    <span class="feedback-title-en">What Our Clients Say</span>
+                    <span class="feedback-title-ur d-none">ہمارے کلائنٹس کیا کہتے ہیں</span>
+                    <span class="feedback-title-ar d-none">ماذا يقول عملاؤنا</span>
+                </h2>
+                <p class="lead text-muted">
+                    <span class="feedback-subtitle-en">Don't just take our word for it - hear from the families we've helped find their dream homes.</span>
+                    <span class="feedback-subtitle-ur d-none">صرف ہماری بات نہ مانیں - ان خاندانوں سے سنیں جن کی ہم نے خوابوں کا گھر تلاش کرنے میں مدد کی ہے۔</span>
+                    <span class="feedback-subtitle-ar d-none">لا تأخذ كلامنا فقط - استمع من العائلات التي ساعدناها في العثور على منازل أحلامهم.</span>
+                </p>
+            </div>
+            
+            <div class="row" id="feedbackContainer">
+                <!-- Feedback cards will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5" style="background-image: linear-gradient(rgba(248,249,250,0.95), rgba(248,249,250,0.95)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&h=1080&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-4 fw-bold text-primary mb-4">
+                    <span class="contact-title-en">Contact Us</span>
+                    <span class="contact-title-ur d-none">ہم سے رابطہ کریں</span>
+                    <span class="contact-title-ar d-none">اتصل بنا</span>
+                </h2>
+                <p class="lead text-muted">
+                    <span class="contact-subtitle-en">Ready to find your perfect property? Get in touch with our expert team today.</span>
+                    <span class="contact-subtitle-ur d-none">اپنی کامل پراپرٹی تلاش کرنے کے لیے تیار ہیں؟ آج ہی ہماری ماہر ٹیم سے رابطہ کریں۔</span>
+                    <span class="contact-subtitle-ar d-none">مستعد للعث��ر على عقارك المثالي؟ تواصل مع فريقنا الخبير اليوم.</span>
+                </p>
+            </div>
+            
+            <div class="row">
+                <!-- Contact Form -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title mb-4">
+                                <span class="form-title-en">Send us a Message</span>
+                                <span class="form-title-ur d-none">ہمیں پیغام بھیجیں</span>
+                                <span class="form-title-ar d-none">أرسل لنا رسالة</span>
+                            </h3>
+                            <form id="contactForm">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="contactName" required
+                                           placeholder="Your Name">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" id="contactEmail" required
+                                           placeholder="Your Email">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="tel" class="form-control" id="contactPhone" required
+                                           placeholder="Your Phone">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="contactSubject" required
+                                           placeholder="Subject">
+                                </div>
+                                <div class="mb-3">
+                                    <textarea class="form-control" id="contactMessage" rows="5" required
+                                              placeholder="Your Message"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-lg w-100">
+                                    <i class="bi bi-send me-2"></i>
+                                    <span class="send-btn-en">Send Message</span>
+                                    <span class="send-btn-ur d-none">پیغام بھیجیں</span>
+                                    <span class="send-btn-ar d-none">إرسال الرسالة</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Information -->
+                <div class="col-lg-6">
+                    <div class="row h-100">
+                        <!-- Get in Touch -->
+                        <div class="col-12 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <span class="touch-title-en">Get in Touch</span>
+                                        <span class="touch-title-ur d-none">رابطے میں رہیں</span>
+                                        <span class="touch-title-ar d-none">تواصل معنا</span>
+                                    </h5>
+                                    <div class="contact-info">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <i class="bi bi-geo-alt-fill text-primary me-3"></i>
+                                            <span>Main Boulevard, Gulberg III, Lahore, Pakistan</span>
+                                        </div>
+                                        <div class="d-flex align-items-center mb-3">
+                                            <i class="bi bi-telephone-fill text-primary me-3"></i>
+                                            <span>+92 42 123 456 789</span>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-envelope-fill text-primary me-3"></i>
+                                            <span>info@remmic.com.pk</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Office Hours -->
+                        <div class="col-12 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <span class="hours-title-en">Office Hours</span>
+                                        <span class="hours-title-ur d-none">دفتری اوقات</span>
+                                        <span class="hours-title-ar d-none">ساعات العمل</span>
+                                    </h5>
+                                    <div class="office-hours">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Monday - Friday:</span>
+                                            <span>9:00 AM - 6:00 PM</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Saturday:</span>
+                                            <span>10:00 AM - 4:00 PM</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Sunday:</span>
+                                            <span>Closed</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <span class="actions-title-en">Quick Actions</span>
+                                        <span class="actions-title-ur d-none">فوری اقدامات</span>
+                                        <span class="actions-title-ar d-none">إجراءات سريعة</span>
+                                    </h5>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-primary">
+                                            <i class="bi bi-telephone me-2"></i>
+                                            <span class="call-btn-en">Call Now</span>
+                                            <span class="call-btn-ur d-none">ابھی کال کر��ں</span>
+                                            <span class="call-btn-ar d-none">اتصل الآن</span>
+                                        </button>
+                                        <button class="btn btn-outline-primary">
+                                            <i class="bi bi-envelope me-2"></i>
+                                            <span class="email-btn-en">Email Us</span>
+                                            <span class="email-btn-ur d-none">ہمیں ای میل کریں</span>
+                                            <span class="email-btn-ar d-none">راسلنا</span>
+                                        </button>
+                                        <button class="btn btn-outline-primary">
+                                            <i class="bi bi-whatsapp me-2"></i>
+                                            <span class="whatsapp-btn-en">WhatsApp</span>
+                                            <span class="whatsapp-btn-ur d-none">واٹس ایپ</span>
+                                            <span class="whatsapp-btn-ar d-none">واتساب</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Section -->
+    <section id="login" class="py-5" style="background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1920&h=1080&fit=crop'); background-size: cover; background-position: center; background-attachment: fixed;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-4 fw-bold text-primary mb-4">
+                    <span class="login-title-en">Client Portal</span>
+                    <span class="login-title-ur d-none">کلائنٹ پورٹل</span>
+                    <span class="login-title-ar d-none">بوابة العملاء</span>
+                </h2>
+                <p class="lead text-muted">
+                    <span class="login-subtitle-en">Access your personal dashboard to save favorite properties, track inquiries, and manage your profile.</span>
+                    <span class="login-subtitle-ur d-none">اپنی پسندیدہ پراپرٹیز محفوظ کرنے، انکوائریز ٹریک کرنے اور پروفائل منظم کرنے کے لیے اپنے ذاتی ڈیش بورڈ تک رسائی حاصل کریں۔</span>
+                    <span class="login-subtitle-ar d-none">احصل على لوحة ��لتحكم الشخصية لحفظ العقارات المفضلة وتتبع الاستفسارات وإدارة ملفك ا��شخصي.</span>
+                </p>
+            </div>
+            
+            <div class="row">
+                <!-- Login Form -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title mb-4">
+                                <span class="login-form-title-en">Login to Your Account</span>
+                                <span class="login-form-title-ur d-none">اپنے اکاؤنٹ میں لاگ ان کریں</span>
+                                <span class="login-form-title-ar d-none">تسجيل الدخول إلى حسابك</span>
+                            </h3>
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" id="loginEmail" required
+                                           placeholder="Email Address">
+                                </div>
+                                <div class="mb-3">
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="loginPassword" required
+                                               placeholder="Password">
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                                    <i class="bi bi-person-fill me-2"></i>
+                                    <span class="login-btn-en">Login</span>
+                                    <span class="login-btn-ur d-none">لاگ ان</span>
+                                    <span class="login-btn-ar d-none">تسجيل الدخول</span>
+                                </button>
+                                <div class="text-center">
+                                    <a href="#" class="text-primary">
+                                        <span class="forgot-btn-en">Forgot Password?</span>
+                                        <span class="forgot-btn-ur d-none">پاس ورڈ بھول گئے؟</span>
+                                        <span class="forgot-btn-ar d-none">نسيت كلمة المرور؟</span>
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Features & Sign Up -->
+                <div class="col-lg-6">
+                    <div class="row h-100">
+                        <!-- New User -->
+                        <div class="col-12 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <span class="new-user-title-en">New to Remmic?</span>
+                                        <span class="new-user-title-ur d-none">ریمک میں نئے ہیں؟</span>
+                                        <span class="new-user-title-ar d-none">جديد في ريميك؟</span>
+                                    </h5>
+                                    <p class="card-text">
+                                        <span class="new-user-text-en">Create an account to unlock personalized features and save your favorite properties.</span>
+                                        <span class="new-user-text-ur d-none">ذاتی خصوصیات کو غیر مقفل کر���� اور اپنی پسندیدہ پراپرٹیز محفوظ کرنے کے لیے اکاؤنٹ بنائیں۔</span>
+                                        <span class="new-user-text-ar d-none">أنشئ حسابًا لفتح الميزات الشخصية وحفظ عقاراتك المفضلة.</span>
+                                    </p>
+                                    <button class="btn btn-outline-primary w-100">
+                                        <span class="signup-btn-en">Create Account</span>
+                                        <span class="signup-btn-ur d-none">اکاؤنٹ بنائیں</span>
+                                        <span class="signup-btn-ar d-none">إنشاء حساب</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Portal Features -->
+                        <div class="col-12 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <span class="features-title-en">Client Portal Features</span>
+                                        <span class="features-title-ur d-none">کلائنٹ پورٹل کی خصوصیات</span>
+                                        <span class="features-title-ar d-none">ميزات بوابة العملاء</span>
+                                    </h5>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2">
+                                            <i class="bi bi-dot text-primary"></i>
+                                            <span class="feature-save-en">Save favorite properties</span>
+                                            <span class="feature-save-ur d-none">پسندیدہ پراپرٹیز محفوظ کریں</span>
+                                            <span class="feature-save-ar d-none">حفظ العقارات المفضلة</span>
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="bi bi-dot text-primary"></i>
+                                            <span class="feature-track-en">Track inquiry status</span>
+                                            <span class="feature-track-ur d-none">انکوائری کی صورتحال ٹریک کریں</span>
+                                            <span class="feature-track-ar d-none">تتبع حالة الاستفسار</span>
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="bi bi-dot text-primary"></i>
+                                            <span class="feature-recommend-en">Get personalized recommendations</span>
+                                            <span class="feature-recommend-ur d-none">ذاتی تجاویز حاصل کریں</span>
+                                            <span class="feature-recommend-ar d-none">احصل على توصيات شخصية</span>
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="bi bi-dot text-primary"></i>
+                                            <span class="feature-manage-en">Manage profile and preferences</span>
+                                            <span class="feature-manage-ur d-none">پروفائل اور ترجیحات منظم کریں</span>
+                                            <span class="feature-manage-ar d-none">إدارة الملف الشخصي والتفضيلات</span>
+                                        </li>
+                                        <li>
+                                            <i class="bi bi-dot text-primary"></i>
+                                            <span class="feature-comm-en">Direct agent communication</span>
+                                            <span class="feature-comm-ur d-none">براہ راست ایجنٹ سے رابطہ</span>
+                                            <span class="feature-comm-ar d-none">التواصل المباشر مع الوكيل</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Admin Access -->
+                        <div class="col-12">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <span class="admin-title-en">Admin Access</span>
+                                        <span class="admin-title-ur d-none">ایڈمن رسائی</span>
+                                        <span class="admin-title-ar d-none">الوصول للمدير</span>
+                                    </h5>
+                                    <p class="card-text opacity-75">
+                                        <span class="admin-text-en">Property managers and agents can access the admin dashboard to manage listings.</span>
+                                        <span class="admin-text-ur d-none">پراپرٹی منیجرز اور ایجنٹس لسٹنگز منظم کرنے کے لیے ایڈمن ڈیش بورڈ تک رسائی حاصل کر سکتے ہیں۔</span>
+                                        <span class="admin-text-ar d-none">يمكن لمديري العقارات والوكلاء الوصول إلى ل��حة تحكم المدير لإدارة القوائم.</span>
+                                    </p>
+                                    <button class="btn btn-light w-100">
+                                        <i class="bi bi-lock-fill me-2"></i>
+                                        <span class="admin-btn-en">Admin Login</span>
+                                        <span class="admin-btn-ur d-none">ایڈمن لاگ ان</span>
+                                        <span class="admin-btn-ar d-none">تسجيل دخول المدير</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Company Info -->
+                <div class="col-lg-3 mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="logo-container me-3">
+                            <div class="logo-icon logo-white">
+                                <i class="bi bi-house-fill"></i>
+                                <div class="logo-accent"></div>
+                            </div>
+                        </div>
+                        <div class="logo-text">
+                            <span class="brand-name text-white">Remmic</span>
+                            <small class="brand-tagline text-white-50">Real Estate</small>
+                        </div>
+                    </div>
+                    <p class="text-light opacity-75 mb-3">
+                        <span class="footer-desc-en">Your trusted partner in finding the perfect property across 6 countries worldwide.</span>
+                        <span class="footer-desc-ur d-none">دنیا بھر کے 6 ممالک میں کامل پراپرٹی تلاش کرنے میں آپ کا قابل اعتماد ��ارٹنر۔</span>
+                        <span class="footer-desc-ar d-none">شريكك الموثوق في العثور على العقار المثالي في 6 دول حول العالم.</span>
+                    </p>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-light btn-sm">
+                            <i class="bi bi-telephone me-1"></i>
+                            <span class="footer-call-en">Call</span>
+                            <span class="footer-call-ur d-none">کال</span>
+                            <span class="footer-call-ar d-none">اتصل</span>
+                        </button>
+                        <button class="btn btn-outline-light btn-sm">
+                            <i class="bi bi-envelope me-1"></i>
+                            <span class="footer-email-en">Email</span>
+                            <span class="footer-email-ur d-none">ای میل</span>
+                            <span class="footer-email-ar d-none">بريد</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="col-lg-3 mb-4">
+                    <h5 class="mb-3">
+                        <span class="footer-links-en">Quick Links</span>
+                        <span class="footer-links-ur d-none">فوری لنکس</span>
+                        <span class="footer-links-ar d-none">روابط سريعة</span>
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="#properties" class="text-light opacity-75 text-decoration-none" onclick="scrollToSection('properties')">
+                                <span class="footer-prop-en">Properties</span>
+                                <span class="footer-prop-ur d-none">پراپرٹیز</span>
+                                <span class="footer-prop-ar d-none">العقارات</span>
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="about.html" class="text-light opacity-75 text-decoration-none">
+                                <span class="footer-about-en">About Us</span>
+                                <span class="footer-about-ur d-none">ہمارے بارے میں</span>
+                                <span class="footer-about-ar d-none">معلومات عنا</span>
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="mission.html" class="text-light opacity-75 text-decoration-none">
+                                <span class="footer-mission-en">Our Mission</span>
+                                <span class="footer-mission-ur d-none">ہمارا مشن</span>
+                                <span class="footer-mission-ar d-none">مهمتنا</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#login" class="text-light opacity-75 text-decoration-none" onclick="scrollToSection('login')">
+                                <span class="footer-portal-en">Client Portal</span>
+                                <span class="footer-portal-ur d-none">کلائنٹ پورٹل</span>
+                                <span class="footer-portal-ar d-none">بوابة العملاء</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Property Types -->
+                <div class="col-lg-3 mb-4">
+                    <h5 class="mb-3">
+                        <span class="footer-types-en">Property Types</span>
+                        <span class="footer-types-ur d-none">پراپرٹی کی اقسام</span>
+                        <span class="footer-types-ar d-none">أنواع العقارات</span>
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="#" class="text-light opacity-75 text-decoration-none" onclick="filterAndGoToProperties('Villa')">
+                                <span class="footer-residential-en">Residential</span>
+                                <span class="footer-residential-ur d-none">رہائشی</span>
+                                <span class="footer-residential-ar d-none">سكني</span>
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#" class="text-light opacity-75 text-decoration-none" onclick="filterAndGoToProperties('Commercial')">
+                                <span class="footer-commercial-en">Commercial</span>
+                                <span class="footer-commercial-ur d-none">کمرشل</span>
+                                <span class="footer-commercial-ar d-none">تجاري</span>
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#" class="text-light opacity-75 text-decoration-none" onclick="filterAndGoToProperties('Farmhouse')">
+                                <span class="footer-plots-en">Plots</span>
+                                <span class="footer-plots-ur d-none">پلاٹس</span>
+                                <span class="footer-plots-ar d-none">قطع أراضي</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-light opacity-75 text-decoration-none" onclick="filterAndGoToProperties('Apartment')">
+                                <span class="footer-rentals-en">Rentals</span>
+                                <span class="footer-rentals-ur d-none">کرایہ</span>
+                                <span class="footer-rentals-ar d-none">إيجارات</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="col-lg-3 mb-4">
+                    <h5 class="mb-3">
+                        <span class="footer-contact-info-en">Contact Info</span>
+                        <span class="footer-contact-info-ur d-none">رابطے کی معلومات</span>
+                        <span class="footer-contact-info-ar d-none">��علومات الاتصال</span>
+                    </h5>
+                    <div class="contact-details">
+                        <p class="mb-2 text-light opacity-75">
+                            <i class="bi bi-geo-alt-fill me-2"></i>
+                            Main Boulevard, Gulberg III, Lahore
+                        </p>
+                        <p class="mb-2 text-light opacity-75">
+                            <i class="bi bi-telephone-fill me-2"></i>
+                            +92 42 123 456 789
+                        </p>
+                        <p class="mb-0 text-light opacity-75">
+                            <i class="bi bi-envelope-fill me-2"></i>
+                            info@remmic.com.pk
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <hr class="my-4 opacity-25">
+            <div class="text-center text-light opacity-75">
+                <p class="mb-0">
+                    <span class="footer-copyright-en">&copy; 2024 Remmic Real Estate. All rights reserved.</span>
+                    <span class="footer-copyright-ur d-none">&copy; 2024 ریمک ریئل اسٹیٹ۔ تمام حقوق محفوظ ہیں۔</span>
+                    <span class="footer-copyright-ar d-none">&copy; 2024 ريميك العقارية. جميع الحقوق محفوظة.</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="{% static 'js/script.js' %}"></script>
+
+</html>

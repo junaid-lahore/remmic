@@ -1,0 +1,580 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Remmic Real Estate</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <!-- Google Maps API -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDummyKeyForDemo&callback=initGoogleMaps&libraries=places"></script>
+
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white-95 backdrop-blur border-bottom">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <div class="logo-container me-3">
+                    <div class="logo-icon">
+                        <i class="bi bi-house-fill"></i>
+                        <div class="logo-accent"></div>
+                    </div>
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">Remmic</span>
+                    <small class="brand-tagline">Real Estate</small>
+                </div>
+            </a>
+            
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <span class="nav-text-en">Home</span>
+                            <span class="nav-text-ur d-none">گھر</span>
+                            <span class="nav-text-ar d-none">الرئيسية</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#properties">
+                            <span class="nav-text-en">Properties</span>
+                            <span class="nav-text-ur d-none">پراپرٹیز</span>
+                            <span class="nav-text-ar d-none">العقارات</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="aboutDropdown" role="button" data-bs-toggle="dropdown">
+                            <span class="nav-text-en">About</span>
+                            <span class="nav-text-ur d-none">ہمارے بارے میں</span>
+                            <span class="nav-text-ar d-none">معلومات عنا</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="about.html">
+                                <span class="nav-text-en">About Us</span>
+                                <span class="nav-text-ur d-none">ہمارے بارے میں</span>
+                                <span class="nav-text-ar d-none">معلومات عنا</span>
+                            </a></li>
+                            <li><a class="dropdown-item" href="mission.html">
+                                <span class="nav-text-en">Our Mission</span>
+                                <span class="nav-text-ur d-none">ہمارا مشن</span>
+                                <span class="nav-text-ar d-none">مهمتنا</span>
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#contact">
+                            <span class="nav-text-en">Contact</span>
+                            <span class="nav-text-ur d-none">رابطہ</span>
+                            <span class="nav-text-ar d-none">اتصل بنا</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">
+                            <span class="nav-text-en">Login</span>
+                            <span class="nav-text-ur d-none">لاگ ان</span>
+                            <span class="nav-text-ar d-none">تسجيل الدخول</span>
+                        </a>
+                    </li>
+                    <li class="nav-item d-none" id="dashboardNavItem">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="bi bi-speedometer2 me-1"></i>
+                            <span class="nav-text-en">Dashboard</span>
+                            <span class="nav-text-ur d-none">ڈیش بورڈ</span>
+                            <span class="nav-text-ar d-none">لوحة التحكم</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Language Switcher -->
+                <div class="dropdown me-3">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown">
+                        <i class="bi bi-globe"></i>
+                        <span id="currentLanguageFlag">🇺🇸</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="changeLanguage('en')">🇺��� English</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeLanguage('ur')">🇵🇰 اردو</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeLanguage('ar')">🇸🇦 العربية</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Get Started Button -->
+                <a class="btn btn-primary" href="index.html#contact">
+                    <span class="btn-text-en">Get Started</span>
+                    <span class="btn-text-ur d-none">شروع کریں</span>
+                    <span class="btn-text-ar d-none">ابدأ الآن</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Us Hero Section -->
+    <section class="py-5 bg-primary text-white" style="margin-top: 80px;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <span class="about-hero-title-en">About Remmic Real Estate</span>
+                        <span class="about-hero-title-ur d-none">ریمک ریئل اسٹیٹ کے بارے میں</span>
+                        <span class="about-hero-title-ar d-none">عن ريميك العقارية</span>
+                    </h1>
+                    <p class="lead mb-4">
+                        <span class="about-hero-desc-en">Your trusted partner in finding the perfect property for over 25 years. We connect dreams with reality through exceptional real estate services.</span>
+                        <span class="about-hero-desc-ur d-none">25 سالوں سے زیادہ عرصے سے کامل پراپرٹی تلاش کرنے میں آپ کا قابل اعتماد پارٹنر۔ ہم بہترین ریئل اسٹیٹ خدمات کے ذریعے خوابوں کو حقیقت سے جوڑتے ہیں۔</span>
+                        <span class="about-hero-desc-ar d-none">شريكك الموثوق في العثور على العقار المثالي لأكثر من 25 عامًا. نربط الأحلام بالواقع من خلال خدمات عقارية استثنائية.</span>
+                    </p>
+                </div>
+                <div class="col-lg-4">
+                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=400&fit=crop" 
+                         alt="Remmic Office" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Company Story Section -->
+    <section class="py-5" style="background-image: linear-gradient(rgba(248, 249, 250, 0.95), rgba(248, 249, 250, 0.95)), url('https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1920&h=1080&fit=crop'); background-size: cover; background-position: center;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <h2 class="h1 fw-bold text-primary mb-4">
+                        <span class="story-title-en">Our Story</span>
+                        <span class="story-title-ur d-none">ہماری کہانی</span>
+                        <span class="story-title-ar d-none">قصتنا</span>
+                    </h2>
+                    <p class="lead mb-4">
+                        <span class="story-text1-en">Founded in 1998, Remmic Real Estate began as a small family business in Lahore with a simple vision: to help families find their perfect homes.</span>
+                        <span class="story-text1-ur d-none">1998 میں قائم ہونے والا، ریمک ریئل اسٹیٹ نے لاہور میں ایک چھوٹے خاندانی کاروبار کے طور پر شروعات کی تھی ایک سادہ ویژن کے ساتھ: خاندانوں کو ان کے کامل گھر تلاش کرنے ��یں مدد کرنا۔</span>
+                        <span class="story-text1-ar d-none">تأسست ريميك العقارية في عام 1998 كشركة عائلية صغيرة في لاهور برؤية بسيطة: مساعدة العائلات في العثور على منازلهم المثالية.</span>
+                    </p>
+                    <p class="mb-4">
+                        <span class="story-text2-en">Over the years, we've grown to become Pakistan's most trusted real estate partner, expanding our services internationally to the UAE, UK, Canada, USA, and Australia. Our commitment to excellence and customer satisfaction has remained unchanged.</span>
+                        <span class="story-text2-ur d-none">سالوں کے دوران، ہم پاکستان کے سب سے قابل اعتماد ریئل اسٹیٹ پارٹنر بن گئے ہیں، اور اپنی خدمات کو بین الاقوامی طور پر متحدہ عرب امارات، برطانیہ، کینیڈا، امریکہ اور آسٹریلیا تک بڑھایا ہے۔ بہترین کارکردگی اور گاہک کی اطمینان کے لیے ہماری وابستگی میں کوئی تبدیلی نہیں آئی۔</span>
+                        <span class="story-text2-ar d-none">على مر السنين، نمو��ا لنصبح الشريك الأكثر ثقة في العقارات في باكستان، ووسعنا خدماتنا دولياً إلى الإمارات والمملكة المتحدة وكندا والولايات المتحدة وأستراليا. التزامنا بالتميز ورضا العملاء لم يتغير.</span>
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-12 mb-4">
+                            <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=600&h=300&fit=crop" 
+                                 alt="Real Estate Team" class="img-fluid rounded shadow">
+                        </div>
+                        <div class="col-6">
+                            <img src="https://images.unsplash.com/photo-1556909114-9b9ca61db9b8?w=300&h=200&fit=crop" 
+                                 alt="Modern Office" class="img-fluid rounded shadow">
+                        </div>
+                        <div class="col-6">
+                            <img src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?w=300&h=200&fit=crop" 
+                                 alt="Property Handshake" class="img-fluid rounded shadow">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-primary mb-4">
+                    <span class="stats-title-en">Our Achievements</span>
+                    <span class="stats-title-ur d-none">ہماری کامیابیاں</span>
+                    <span class="stats-title-ar d-none">إنجازاتنا</span>
+                </h2>
+                <p class="lead text-muted">
+                    <span class="stats-desc-en">Numbers that speak for our commitment to excellence</span>
+                    <span class="stats-desc-ur d-none">وہ اعداد و شمار جو بہترین کارکردگی کے لیے ہماری وابستگی کا اظہار کرتے ہیں</span>
+                    <span class="stats-desc-ar d-none">أرقام تتحدث عن التزامنا بالتميز</span>
+                </p>
+            </div>
+            
+            <div class="row text-center">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stat-card p-4">
+                        <div class="stat-number">25+</div>
+                        <div class="stat-label">
+                            <span class="stat-years-en">Years of Excellence</span>
+                            <span class="stat-years-ur d-none">سال کی بہترین کارکردگی</span>
+                            <span class="stat-years-ar d-none">سنوات من التميز</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stat-card p-4">
+                        <div class="stat-number">10K+</div>
+                        <div class="stat-label">
+                            <span class="stat-families-en">Happy Families</span>
+                            <span class="stat-families-ur d-none">خوش خاندان</span>
+                            <span class="stat-families-ar d-none">عائلات سعيدة</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stat-card p-4">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">
+                            <span class="stat-properties-en">Properties Sold</span>
+                            <span class="stat-properties-ur d-none">فروخت شدہ پراپرٹیز</span>
+                            <span class="stat-properties-ar d-none">عقارات مباعة</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stat-card p-4">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">
+                            <span class="stat-countries-en">Countries</span>
+                            <span class="stat-countries-ur d-none">ممالک</span>
+                            <span class="stat-countries-ar d-none">دول</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Team Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-primary mb-4">
+                    <span class="team-title-en">Our Leadership Team</span>
+                    <span class="team-title-ur d-none">ہماری قیادت ٹیم</span>
+                    <span class="team-title-ar d-none">فريق القيادة</span>
+                </h2>
+                <p class="lead text-muted">
+                    <span class="team-subtitle-en">Meet the experienced professionals who drive Remmic's success and commitment to excellence.</span>
+                    <span class="team-subtitle-ur d-none">تجربہ کار پیشہ ور افراد سے ملیں جو ریمک کی کامیابی اور بہترین کارکردگی کو آگے بڑھاتے ہیں۔</span>
+                    <span class="team-subtitle-ar d-none">تعرف على المهنيين ذوي الخبرة الذين يقودون نجاح ريميك والتزامها بالتميز.</span>
+                </p>
+            </div>
+            
+            <div class="row">
+                <!-- Team Member 1 -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop" 
+                                 alt="Ahmed Hassan" class="team-photo mb-3">
+                            <h5 class="card-title">Ahmed Hassan</h5>
+                            <p class="text-primary fw-semibold">
+                                <span class="role-ceo-en">CEO & Founder</span>
+                                <span class="role-ceo-ur d-none">سی ای او اور بانی</span>
+                                <span class="role-ceo-ar d-none">الرئيس التنفيذي والمؤسس</span>
+                            </p>
+                            <p class="text-muted">
+                                <span class="exp-25-en">25+ years in real estate</span>
+                                <span class="exp-25-ur d-none">25+ سال ریئل اسٹیٹ میں</span>
+                                <span class="exp-25-ar d-none">أكثر من 25 عامًا في العقارات</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member 2 -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop" 
+                                 alt="Fatima Ali" class="team-photo mb-3">
+                            <h5 class="card-title">Fatima Ali</h5>
+                            <p class="text-primary fw-semibold">
+                                <span class="role-sales-en">Head of Sales</span>
+                                <span class="role-sales-ur d-none">ہیڈ آف سیلز</span>
+                                <span class="role-sales-ar d-none">رئيس المبيعات</span>
+                            </p>
+                            <p class="text-muted">
+                                <span class="exp-15-en">15+ years in real estate</span>
+                                <span class="exp-15-ur d-none">15+ سال ریئل اسٹیٹ میں</span>
+                                <span class="exp-15-ar d-none">أكثر من 15 عامًا في العقارات</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member 3 -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop" 
+                                 alt="Muhammad Khan" class="team-photo mb-3">
+                            <h5 class="card-title">Muhammad Khan</h5>
+                            <p class="text-primary fw-semibold">
+                                <span class="role-manager-en">International Director</span>
+                                <span class="role-manager-ur d-none">بین الاقوامی ڈائریکٹر</span>
+                                <span class="role-manager-ar d-none">المدير الدولي</span>
+                            </p>
+                            <p class="text-muted">
+                                <span class="exp-12-en">12+ years in international markets</span>
+                                <span class="exp-12-ur d-none">12+ سال بین الاقوامی بازاروں میں</span>
+                                <span class="exp-12-ar d-none">أكثر من 12 عامًا في الأسواق الدولية</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold text-primary mb-4">
+                    <span class="values-title-en">Our Values</span>
+                    <span class="values-title-ur d-none">ہماری اقدار</span>
+                    <span class="values-title-ar d-none">قيمنا</span>
+                </h2>
+                <p class="lead text-muted">
+                    <span class="values-desc-en">The principles that guide everything we do</span>
+                    <span class="values-desc-ur d-none">وہ اصول جو ہمارے ہر کام کی رہنمائی کرتے ہیں</span>
+                    <span class="values-desc-ar d-none">المبادئ التي توجه كل ما نقوم به</span>
+                </p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="text-center">
+                        <div class="feature-icon mb-3 mx-auto">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h5 class="fw-semibold mb-3">
+                            <span class="value1-title-en">Integrity</span>
+                            <span class="value1-title-ur d-none">دیانتداری</span>
+                            <span class="value1-title-ar d-none">النزاهة</span>
+                        </h5>
+                        <p class="text-muted">
+                            <span class="value1-desc-en">We conduct business with the highest ethical standards and complete transparency.</span>
+                            <span class="value1-desc-ur d-none">ہم اعلیٰ ترین اخلاقی معیارات اور مکمل شفافیت کے ساتھ کاروبار کرتے ہیں۔</span>
+                            <span class="value1-desc-ar d-none">نقوم بأعمالنا وفقًا لأعلى المعايير الأخلاقية والشفافية الكاملة.</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="text-center">
+                        <div class="feature-icon mb-3 mx-auto">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <h5 class="fw-semibold mb-3">
+                            <span class="value2-title-en">Customer First</span>
+                            <span class="value2-title-ur d-none">پہلے گاہک</span>
+                            <span class="value2-title-ar d-none">العميل أولاً</span>
+                        </h5>
+                        <p class="text-muted">
+                            <span class="value2-desc-en">Our clients' needs and dreams are at the center of everything we do.</span>
+                            <span class="value2-desc-ur d-none">ہمارے کلائنٹس کی ضروریات اور خواب ہمارے ہر کام کے مرکز میں ہیں۔</span>
+                            <span class="value2-desc-ar d-none">احتياجات وأحلام عملائنا في مركز كل ما نقوم به.</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="text-center">
+                        <div class="feature-icon mb-3 mx-auto">
+                            <i class="bi bi-award"></i>
+                        </div>
+                        <h5 class="fw-semibold mb-3">
+                            <span class="value3-title-en">Excellence</span>
+                            <span class="value3-title-ur d-none">بہترین کارکردگی</span>
+                            <span class="value3-title-ar d-none">التميز</span>
+                        </h5>
+                        <p class="text-muted">
+                            <span class="value3-desc-en">We strive for excellence in every interaction, service, and solution we provide.</span>
+                            <span class="value3-desc-ur d-none">ہم ہر بات چیت، خدمت اور حل میں بہترین کارکردگی کے لیے کوشش کرتے ہیں۔</span>
+                            <span class="value3-desc-ar d-none">نسعى للتميز في كل تفاعل وخدمة وحل نقدمه.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h2 class="display-6 fw-bold mb-3">
+                        <span class="cta-title-en">Ready to Find Your Dream Property?</span>
+                        <span class="cta-title-ur d-none">اپنی خوابوں کی پراپرٹی تلاش کرنے کے لیے تیار ہیں؟</span>
+                        <span class="cta-title-ar d-none">مستعد للعثور على عقار أحلامك؟</span>
+                    </h2>
+                    <p class="lead mb-0">
+                        <span class="cta-desc-en">Let our experienced team help you find the perfect property that matches your needs and budget.</span>
+                        <span class="cta-desc-ur d-none">ہماری تجربہ کار ٹیم آپ کو کامل پراپرٹی تلاش کرنے میں مدد کرے جو آ�� کی ضروریات اور بجٹ کے مطابق ہو۔</span>
+                        <span class="cta-desc-ar d-none">دع فريقنا ذو الخبرة يساعدك في العثور على العقار المثالي الذي يلبي احتياجاتك وميزانيتك.</span>
+                    </p>
+                </div>
+                <div class="col-lg-4 text-end">
+                    <a href="index.html#contact" class="btn btn-light btn-lg">
+                        <span class="cta-btn-en">Contact Us Today</span>
+                        <span class="cta-btn-ur d-none">آج ہی رابطہ کریں</span>
+                        <span class="cta-btn-ar d-none">تواصل معنا اليوم</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Company Info -->
+                <div class="col-lg-3 mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="logo-container me-3">
+                            <div class="logo-icon logo-white">
+                                <i class="bi bi-house-fill"></i>
+                                <div class="logo-accent"></div>
+                            </div>
+                        </div>
+                        <div class="logo-text">
+                            <span class="brand-name text-white">Remmic</span>
+                            <small class="brand-tagline text-white-50">Real Estate</small>
+                        </div>
+                    </div>
+                    <p class="text-light opacity-75 mb-3">
+                        <span class="footer-desc-en">Your trusted partner in finding the perfect property across 6 countries worldwide.</span>
+                        <span class="footer-desc-ur d-none">دنیا بھر کے 6 ممالک میں کامل پراپرٹی تلاش کرنے میں آپ کا قابل اعتماد پارٹنر۔</span>
+                        <span class="footer-desc-ar d-none">شريكك الموثوق في العثور على العقار المثالي في 6 دول حول العالم.</span>
+                    </p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="col-lg-3 mb-4">
+                    <h5 class="mb-3">
+                        <span class="footer-links-en">Quick Links</span>
+                        <span class="footer-links-ur d-none">فوری لنکس</span>
+                        <span class="footer-links-ar d-none">روابط سريعة</span>
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="index.html" class="text-light opacity-75 text-decoration-none">
+                                <span class="footer-home-en">Home</span>
+                                <span class="footer-home-ur d-none">گھر</span>
+                                <span class="footer-home-ar d-none">الرئيسية</span>
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="index.html#properties" class="text-light opacity-75 text-decoration-none">
+                                <span class="footer-prop-en">Properties</span>
+                                <span class="footer-prop-ur d-none">پراپرٹیز</span>
+                                <span class="footer-prop-ar d-none">العقارات</span>
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="about.html" class="text-light opacity-75 text-decoration-none">
+                                <span class="footer-about-en">About Us</span>
+                                <span class="footer-about-ur d-none">ہمارے بارے میں</span>
+                                <span class="footer-about-ar d-none">معلومات عنا</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="mission.html" class="text-light opacity-75 text-decoration-none">
+                                <span class="footer-mission-en">Our Mission</span>
+                                <span class="footer-mission-ur d-none">ہمارا مشن</span>
+                                <span class="footer-mission-ar d-none">مهمتنا</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Services -->
+                <div class="col-lg-3 mb-4">
+                    <h5 class="mb-3">
+                        <span class="footer-services-en">Services</span>
+                        <span class="footer-services-ur d-none">خدمات</span>
+                        <span class="footer-services-ar d-none">الخدمات</span>
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="#" class="text-light opacity-75 text-decoration-none">
+                                <span class="footer-buy-en">Property Buying</span>
+                                <span class="footer-buy-ur d-none">پراپرٹی خریدنا</span>
+                                <span class="footer-buy-ar d-none">شراء العقارات</span>
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#" class="text-light opacity-75 text-decoration-none">
+                                <span class="footer-sell-en">Property Selling</span>
+                                <span class="footer-sell-ur d-none">پراپرٹی بیچنا</span>
+                                <span class="footer-sell-ar d-none">بيع العقارات</span>
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#" class="text-light opacity-75 text-decoration-none">
+                                <span class="footer-rent-en">Property Rental</span>
+                                <span class="footer-rent-ur d-none">پراپرٹی کرایہ</span>
+                                <span class="footer-rent-ar d-none">تأجير العقارات</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-light opacity-75 text-decoration-none">
+                                <span class="footer-consult-en">Consultation</span>
+                                <span class="footer-consult-ur d-none">مشاورت</span>
+                                <span class="footer-consult-ar d-none">الاستشارة</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div class="col-lg-3 mb-4">
+                    <h5 class="mb-3">
+                        <span class="footer-contact-info-en">Contact Info</span>
+                        <span class="footer-contact-info-ur d-none">رابطے کی معلومات</span>
+                        <span class="footer-contact-info-ar d-none">معلومات الاتصال</span>
+                    </h5>
+                    <div class="contact-details">
+                        <p class="mb-2 text-light opacity-75">
+                            <i class="bi bi-geo-alt-fill me-2"></i>
+                            Main Boulevard, Gulberg III, Lahore
+                        </p>
+                        <p class="mb-2 text-light opacity-75">
+                            <i class="bi bi-telephone-fill me-2"></i>
+                            +92 42 123 456 789
+                        </p>
+                        <p class="mb-0 text-light opacity-75">
+                            <i class="bi bi-envelope-fill me-2"></i>
+                            info@remmic.com.pk
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <hr class="my-4 opacity-25">
+            <div class="text-center text-light opacity-75">
+                <p class="mb-0">
+                    <span class="footer-copyright-en">&copy; 2024 Remmic Real Estate. All rights reserved.</span>
+                    <span class="footer-copyright-ur d-none">&copy; 2024 ریمک ریئل اسٹیٹ۔ تمام حقوق محفوظ ہیں۔</span>
+                    <span class="footer-copyright-ar d-none">&copy; 2024 ريميك العقارية. جميع الحقوق محفوظة.</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
